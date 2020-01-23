@@ -1,0 +1,102 @@
+== Info: Rebuilt URL to: cookies.txt/
+== Info: Could not resolve host: cookies.txt
+== Info: Closing connection 0
+== Info:   Trying 52.35.33.240...
+== Info: TCP_NODELAY set
+== Info: Connected to api.us2.sumologic.com (52.35.33.240) port 443 (#1)
+== Info: schannel: SSL/TLS connection with api.us2.sumologic.com port 443 (step 1/3)
+== Info: schannel: checking server certificate revocation
+== Info: schannel: sending initial handshake data: sending 186 bytes...
+== Info: schannel: sent initial handshake data: sent 186 bytes
+== Info: schannel: SSL/TLS connection with api.us2.sumologic.com port 443 (step 2/3)
+== Info: schannel: failed to receive handshake, need more data
+== Info: schannel: SSL/TLS connection with api.us2.sumologic.com port 443 (step 2/3)
+== Info: schannel: encrypted data got 3493
+== Info: schannel: encrypted data buffer: offset 3493 length 4096
+== Info: schannel: sending next handshake data: sending 126 bytes...
+== Info: schannel: SSL/TLS connection with api.us2.sumologic.com port 443 (step 2/3)
+== Info: schannel: encrypted data got 274
+== Info: schannel: encrypted data buffer: offset 274 length 4096
+== Info: schannel: SSL/TLS handshake complete
+== Info: schannel: SSL/TLS connection with api.us2.sumologic.com port 443 (step 3/3)
+== Info: schannel: stored credential handle in session cache
+== Info: Server auth using Basic with user 'suGkL7leq6ouKp'
+=> Send header, 264 bytes (0x108)
+0000: GET /api/v1/search/jobs/70B7C842B519BC7E HTTP/1.1
+0033: Host: api.us2.sumologic.com
+0050: Authorization: Basic c3VHa0w3bGVxNm91S3A6RjI0SmFDdTBaZWVITFJlZzl
+0090: FMko0VFBnT3RzZDFvR1JMQlRZbDd4ZE9wNVUwdmpSTENPa3lRZndPOTN2aXVCOA=
+00d0: =
+00d3: User-Agent: curl/7.55.1
+00ec: Accept: application/json
+0106: 
+== Info: schannel: client wants to read 102400 bytes
+== Info: schannel: encdata_buffer resized 103424
+== Info: schannel: encrypted data buffer: offset 0 length 103424
+== Info: schannel: encrypted data got 1673
+== Info: schannel: encrypted data buffer: offset 1673 length 103424
+== Info: schannel: decrypted data length: 1610
+== Info: schannel: decrypted data added: 1610
+== Info: schannel: decrypted data cached: offset 1610 length 102400
+== Info: schannel: encrypted data length: 34
+== Info: schannel: encrypted data cached: offset 34 length 103424
+== Info: schannel: decrypted data length: 5
+== Info: schannel: decrypted data added: 5
+== Info: schannel: decrypted data cached: offset 1615 length 102400
+== Info: schannel: encrypted data buffer: offset 0 length 103424
+== Info: schannel: decrypted data buffer: offset 1615 length 102400
+== Info: schannel: schannel_recv cleanup
+== Info: schannel: decrypted data returned 1615
+== Info: schannel: decrypted data buffer: offset 0 length 102400
+<= Recv header, 17 bytes (0x11)
+0000: HTTP/1.1 200 OK
+<= Recv header, 37 bytes (0x25)
+0000: Date: Mon, 04 Nov 2019 18:26:19 GMT
+<= Recv header, 46 bytes (0x2e)
+0000: Content-Type: application/json;charset=utf-8
+<= Recv header, 28 bytes (0x1c)
+0000: Transfer-Encoding: chunked
+<= Recv header, 24 bytes (0x18)
+0000: Connection: keep-alive
+== Info: Added cookie AWSALB="yIM7ltUYru5fvTQA3MQtM+zRs2EgZKKokaQQpFxRJxSsyXs4crZS4ahlDLS6jSvsY7awaaZf/L21oNAtKKCmZPH1WdEgfJa+i6NlTSCfD4ypLBDeFj7/4Y6Cdcrf" for domain api.us2.sumologic.com, path /, expire 1573496779
+<= Recv header, 192 bytes (0xc0)
+0000: Set-Cookie: AWSALB=yIM7ltUYru5fvTQA3MQtM+zRs2EgZKKokaQQpFxRJxSsy
+0040: Xs4crZS4ahlDLS6jSvsY7awaaZf/L21oNAtKKCmZPH1WdEgfJa+i6NlTSCfD4ypL
+0080: BDeFj7/4Y6Cdcrf; Expires=Mon, 11 Nov 2019 18:26:19 GMT; Path=/
+== Info: Added cookie JSESSIONID="node0k2x3pwlp1h14i06lpjua9et33829965.node0" for domain api.us2.sumologic.com, path /api, expire 0
+<= Recv header, 78 bytes (0x4e)
+0000: Set-Cookie: JSESSIONID=node0k2x3pwlp1h14i06lpjua9et33829965.node
+0040: 0; Path=/api
+<= Recv header, 40 bytes (0x28)
+0000: Expires: Thu, 01 Jan 1970 00:00:00 GMT
+<= Recv header, 33 bytes (0x21)
+0000: X-XSS-Protection: 1; mode=block
+<= Recv header, 23 bytes (0x17)
+0000: X-Frame-Options: DENY
+<= Recv header, 33 bytes (0x21)
+0000: X-Content-Type-Options: nosniff
+<= Recv header, 35 bytes (0x23)
+0000: Vary: Accept-Encoding, User-Agent
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 1027 bytes (0x403)
+0000: 3f7
+0005: {"state":"DONE GATHERING RESULTS","histogramBuckets":[{"startTim
+0045: estamp":1572891900000,"length":60000,"count":18},{"startTimestam
+0085: p":1572891840000,"length":60000,"count":22},{"startTimestamp":15
+00c5: 72891780000,"length":60000,"count":23},{"startTimestamp":1572891
+0105: 720000,"length":60000,"count":17},{"startTimestamp":157289166000
+0145: 0,"length":60000,"count":17},{"startTimestamp":1572891600000,"le
+0185: ngth":60000,"count":36},{"startTimestamp":1572891540000,"length"
+01c5: :60000,"count":21},{"startTimestamp":1572891480000,"length":6000
+0205: 0,"count":24},{"startTimestamp":1572891420000,"length":60000,"co
+0245: unt":24},{"startTimestamp":1572891360000,"length":60000,"count":
+0285: 22},{"startTimestamp":1572891300000,"length":60000,"count":12},{
+02c5: "startTimestamp":1572891240000,"length":60000,"count":25},{"star
+0305: tTimestamp":1572891180000,"length":60000,"count":20},{"startTime
+0345: stamp":1572891120000,"length":60000,"count":23},{"startTimestamp
+0385: ":1572891077000,"length":43000,"count":21}],"messageCount":325,"
+03c5: recordCount":0,"pendingWarnings":[],"pendingErrors":[]}
+03fe: 0
+0401: 
+== Info: Connection #1 to host api.us2.sumologic.com left intact
