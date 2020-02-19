@@ -342,6 +342,25 @@ setEvaluationVariables = function () {
         'incomeInfo',
         'employmentInfo'
     )
+    expected.value.ranges = data.frame(
+        key = c(
+            'language',
+            'incomeType',
+            'payrollType',
+            'payrollFrequency',
+            'zip'
+        ), 
+        value = I(list(
+            c('en'),
+            c('Employment', 'OtherNonTaxableIncome', 'OtherTaxableIncome', 'SelfEmployed'),
+            c('Cash', 'DirectDeposit', 'PaperCheck'),
+            c(1,2,3,4),
+            suppressWarnings({suppressMessages({read_csv("..\\data\\zip_code_database.csv")})}) %>% filter(country == 'US') %>% .$zip
+        )),
+        stringsAsFactors = FALSE
+    )
+    
+    
     values = '\\\"[^\\{]*?\\\":\\s(?:(\\\"[^\\{]*?\\\")|([^\\{]*?)[,\\}])'
     keys = '\\\"([^,]*?)\\\":'
 
@@ -360,7 +379,6 @@ setEvaluationVariables = function () {
     quoted.name = '^\\\"[a-zA-Z\\s\\-\\.]+\\\"$'
     quoted.email = '^\\\".*@.*\\..*\\\"$'
     quoted.state = '^\\\"[A-Z]{2}\\\"$'
-#         quoted.state = '^\\\"(?:AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\\\"$'
     quoted.currency = '^\\\"USD\\\"$'
     quoted.currencyCode = '^\\\"USD\\\"$'
     quoted.blank = '^\\\"[\\s]*\\\"$'
@@ -2070,7 +2088,14 @@ validateValues = function (key, value, admethod, regex.map, partner.map, ...) {
 
                 response.vector = c()
 
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
+                format.correct = expr(
+                    value %>% str_detect(
+                        regex.map$unquoted.integer
+                    ) |
+                    value %>% str_detect(
+                        regex.map$unquoted.null
+                    )
+                )
 
                 if (! eval(format.correct))
                     response.vector %<>% c(919)
@@ -2130,7 +2155,14 @@ validateValues = function (key, value, admethod, regex.map, partner.map, ...) {
 
                 response.vector = c()
 
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
+                format.correct = expr(
+                    value %>% str_detect(
+                        regex.map$unquoted.integer
+                    ) |
+                    value %>% str_detect(
+                        regex.map$unquoted.null
+                    )
+                )
 
                 if (! eval(format.correct))
                     response.vector %<>% c(923)
@@ -2333,6 +2365,18 @@ validateValues = function (key, value, admethod, regex.map, partner.map, ...) {
     
 }
 
+validateRanges = function (key, value, regex.map, ...) {
+    
+    args = list(...)
+    
+    if (key %in% regex.map$expected.value.ranges$key) {
+        value %in% (regex.map$expected.value.ranges %>% filter(key == key) %>% .$value %>% .[[1]])
+    } else {
+        TRUE
+    }
+    
+}
+
 getEvaluationDF = function (test.payloads) {
 
 #     setGlobalVars()
@@ -2466,9 +2510,9 @@ getEvaluationDF = function (test.payloads) {
                     }
                 
                 ),
-            validate.values = pmap(
-
+            
                 ####  Valid Value = Value Value Validation  ####
+            validate.values = pmap(
                 .l = list(validate.values, lead_time, admethod),
                 .f = function (a,b,c) {
                     
@@ -2485,8 +2529,8 @@ getEvaluationDF = function (test.payloads) {
 
                             a %>% 
 
-                                ######  Error Code - Raw_Request_Validator.clj  ######
                                 mutate(
+                                    ######  Error Code - Raw_Request_Validator.clj  ######
                                     value.codes = pmap(
                                         .l = list(key, value),
                                         .f = function (a, b) {
@@ -2504,6 +2548,25 @@ getEvaluationDF = function (test.payloads) {
                                                 },
                                                 error = function (e) {
                                                     return(9000)
+                                                }
+                                            )
+                                        }
+                                    ),
+                                    
+                                    ######  Value Ranges  ######
+                                    value.in.range = pmap(
+                                        .l = list(key, value),
+                                        .f = function (a, b) {
+                                            tryCatch(
+                                                expr = {
+                                                    validateRanges(
+                                                        key = a,
+                                                        value = b,
+                                                        regex.map = regex.map
+                                                    )
+                                                },
+                                                error = function (e) {
+                                                    return(NA)
                                                 }
                                             )
                                         }
