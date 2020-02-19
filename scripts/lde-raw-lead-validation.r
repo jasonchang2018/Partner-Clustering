@@ -908,1461 +908,1461 @@ validateStructure = function (admethod, keys.missing, partner.map, ...) {
 }
 
 validateValues = function (key, value, admethod, regex.map, partner.map, ...) {
+  
+  args = list(...)
+  validator = function (admethod) {
     
-    args = list(...)
-    validator = function (admethod) {
+    if ( partner.map %>% filter(name == admethod) %>% .$lde_type %in% c('Affiliate') ) {
+      
+      ###  AFFILIATE  ###
+      ldevalidate_value_isProduction <- function (value) {
         
-        if ( partner.map %>% filter(name == admethod) %>% .$lde_type %in% c('Affiliate') ) {
-            
-            ###  AFFILIATE  ###
-            ldevalidate_value_isProduction <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.boolean))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(900)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                ## DONE - LDE Affl
-            ldevalidate_value_leadOfferId <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(901)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                 ## DONE - LDE Affl
-            ldevalidate_value_clickId <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(901)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                     ## DONE - LDE Affl
-            ldevalidate_value_campaignId <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(901)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                  ## DONE - LDE Affl
-            ldevalidate_value_language <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(902)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                    ## DONE - LDE Affl
-            ldevalidate_value_socialSecurityNumber <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.ssn))
-                valid.first3 = expr(
-                    ! value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(\\d{3})-?(?:\\d{2})-?(?:\\d{4})\\\"$'
-                            )
-                        ) %in% c('666', '000')
-                )
-                valid.second3 = expr(
-                    ! value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(?:\\d{3})-?(\\d{2})-?(?:\\d{4})\\\"$'
-                            )
-                        ) %in% c('0')
-                )
-                valid.last4 = expr(
-                    ! value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(?:\\d{3})-?(?:\\d{2})-?(\\d{4})\\\"$'
-                            )
-                        ) %in% c('0000')
-                )
-
-
-
-
-                if (! eval(format.correct) |
-                    ! eval(valid.first3) |
-                    ! eval(valid.second3) |
-                    ! eval(valid.last4) )
-                    response.vector %<>% c(315)
-
-                if (  eval(format.correct) &
-                      eval(valid.first3) &
-                      eval(valid.second3) &
-                      eval(valid.last4) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}        ## DONE - LDE Affl
-            ldevalidate_value_email <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.email))
-                email.not.mil = expr(
-                    ! value %>% 
-                        str_detect(
-                            pattern = regex(
-                                '^\\\".*@.*\\.mil\\\"$'
-                            )
-                        )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(313)
-                if (! eval(email.not.mil))
-                    response.vector %<>% c(313)
-                if (  eval(format.correct) &
-                      eval(email.not.mil) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                       ## DONE - LDE Affl
-            ldevalidate_value_stateCode <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.state))
-                valid.state = expr(
-                    value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(?:AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\\\"$'
-                            )
-                        )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(905)
-                if (! eval(valid.state))
-                    response.vector %<>% c(402)
-                if (  eval(format.correct) &
-                      eval(valid.state))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                   ## DONE - LDE Affl
-            ldevalidate_value_grossMonthlyIncome <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.float.positive))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(333)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}          ## DONE - LDE Affl
-            ldevalidate_value_currency <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.currency))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(907)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                    ## DONE - LDE Affl
-            ldevalidate_value_currencyCode <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.currencyCode))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(907)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                ## DONE - LDE Affl
-            ldevalidate_value_firstName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(908)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                   ## DONE - LDE Affl
-            ldevalidate_value_lastName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(909)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                    ## DONE - LDE Affl
-            ldevalidate_value_dateOfBirth <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.past = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
-                )
-
-                if (! eval(format.correct) |
-                    ! eval(length.correct) )
-                    response.vector %<>% c(319)
-
-                if (  eval(format.correct) &
-                      eval(length.correct) &
-                    ! eval(date.in.past) )
-                    response.vector %<>% c(624)
-
-                if (  eval(format.correct) &
-                      eval(length.correct) &
-                      eval(date.in.past) )
-                    response.vector %<>% c(200)
-
-
-
-                return (response.vector)
-
-}                 ## DONE - LDE Affl
-            ldevalidate_value_streetAddress <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-                not.pobox = expr(
-                    !value %>% str_detect(
-                        pattern = regex(
-                            "(?i)^\\\".*p[.]?o[.]?[\\s]*box.*\\\"$"
-                        )
-                    )
-                )
-                not.blank = expr(
-                    !(
-                        value %>% str_detect(regex.map$unquoted.null) |
-                        value %>% str_detect(regex.map$quoted.blank) |
-                        value %>% str_detect(regex.map$unquoted.boolean)
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(911)
-                if (! eval(not.blank))
-                    response.vector %<>% c(342)
-                if (! eval(not.pobox))
-                    response.vector %<>% c(608)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}               ## DONE - LDE Affl
-            ldevalidate_value_city <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-                not.blank = expr(
-                    !(
-                        value %>% str_detect(regex.map$unquoted.null) |
-                        value %>% str_detect(regex.map$quoted.blank) |
-                        value %>% str_detect(regex.map$unquoted.boolean)
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(912)
-                if (! eval(not.blank))
-                    response.vector %<>% c(342)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                        ## DONE - LDE Affl
-            ldevalidate_value_zip <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.zip))
-                not.blank = expr(
-                    !(
-                        value %>% str_detect(regex.map$unquoted.null) |
-                        value %>% str_detect(regex.map$quoted.blank) |
-                        value %>% str_detect(regex.map$unquoted.boolean)
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(913)
-                if (! eval(not.blank))
-                    response.vector %<>% c(342)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                         ## DONE - LDE Affl
-            ldevalidate_value_countryCode <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.countryCode))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(403)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                 ## DONE - LDE Affl
-            ldevalidate_value_mobilePhone <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(701)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                 ## DONE - LDE Affl
-            ldevalidate_value_homePhone <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(915)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                   ## DONE - LDE Affl
-            ldevalidate_value_bankName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(916)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                    ## DONE - LDE Affl
-            ldevalidate_value_abaRoutingNumber <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.aba))
-                checksum.pass = expr(
-                    (
-                        value %>% str_remove_all("\"") %>% substr(1,1) %>% as.integer() * 3 +
-                        value %>% str_remove_all("\"") %>% substr(2,2) %>% as.integer() * 7 +
-                        value %>% str_remove_all("\"") %>% substr(3,3) %>% as.integer() * 1 +
-                        value %>% str_remove_all("\"") %>% substr(4,4) %>% as.integer() * 3 +
-                        value %>% str_remove_all("\"") %>% substr(5,5) %>% as.integer() * 7 +
-                        value %>% str_remove_all("\"") %>% substr(6,6) %>% as.integer() * 1 +
-                        value %>% str_remove_all("\"") %>% substr(7,7) %>% as.integer() * 3 +
-                        value %>% str_remove_all("\"") %>% substr(8,8) %>% as.integer() * 7 +
-                        value %>% str_remove_all("\"") %>% substr(9,9) %>% as.integer() * 1
-                    ) %% 10 == 0
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(711)
-                if (  eval(format.correct) &
-                    ! eval(checksum.pass) )
-                    response.vector %<>% c(999)
-                if (  eval(format.correct) &
-                      eval(checksum.pass) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}            ## DONE - LDE Affl
-            ldevalidate_value_accountNumber <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.accountNumber))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(710)
-                if (  eval(format.correct) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}               ## DONE - LDE Affl
-            ldevalidate_value_accountType <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(712)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                 ## DONE - LDE Affl
-            ldevalidate_value_accountLength <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(713)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}               ## DONE - LDE Affl
-            ldevalidate_value_incomeType <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(921)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                  ## DONE - LDE Affl
-            ldevalidate_value_payrollType <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(
-                    value %>% str_detect(
-                        pattern = regex(
-                            '^\\\"(?:[Cc]ash|[Cc]heck|[Dd]irect\\s?[Dd]eposit)\\\"$'
-                        )
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(705)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                 ## DONE - LDE Affl
-            ldevalidate_value_payrollFrequency <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(706)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}            ## DONE - LDE Affl
-            ldevalidate_value_lastPayrollDate <- function (value) {
-
-                # can be unquoted null OR (date format AND in the past)
-                response.vector = c()
-
-                format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.past = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
-                )
-
-                if (  ! eval(format.isnull) &
-                     (! eval(format.correct) | ! eval(length.correct))  )
-                    response.vector %<>% c(707)
-
-                if ( ! eval(format.isnull) &
-                      (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
-                    response.vector %<>% c(707)
-
-                if ( eval(format.isnull) |
-                    (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}             ## DONE - LDE Affl
-            ldevalidate_value_nextPayrollDate <- function (value) {
-
-                # can be unquoted null OR (date format AND in the future)
-                response.vector = c()
-
-                format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.future = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() > args$present.time
-                )
-
-                if (  ! eval(format.isnull) &
-                     (! eval(format.correct) | ! eval(length.correct))  )
-                    response.vector %<>% c(708)
-
-                if ( ! eval(format.isnull) &
-                      (eval(format.correct) & eval(length.correct)) & ! eval(date.in.future) )
-                    response.vector %<>% c(708)
-
-                if ( eval(format.isnull) |
-                    (eval(format.correct) & eval(length.correct)) & eval(date.in.future) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}             ## DONE - LDE Affl
-            ldevalidate_value_employerName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-                different.from.bankName = expr(
-                    value != args$bankName || length(args$bankName) == 0
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(926)
-                if (! eval(different.from.bankName))
-                    response.vector %<>% c(610)
-                if (  eval(format.correct) &
-                      eval(different.from.bankName) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                ## DONE - LDE Affl
-            ldevalidate_value_hireDate <- function (value) {
-
-                # can be unquoted null OR (date format AND in the past)
-                response.vector = c()
-
-                format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.past = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
-                )
-
-                if (  ! eval(format.isnull) &
-                     (! eval(format.correct) | ! eval(length.correct))  )
-                    response.vector %<>% c(319)
-
-                if ( ! eval(format.isnull) &
-                      (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
-                    response.vector %<>% c(319)
-
-                if ( eval(format.isnull) |
-                    (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                    ## DONE - LDE Affl
-            ldevalidate_value_requestedLoanAmount <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$optional.quoted.float.positive))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(714)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }         ## DONE - LDE Affl
-            ldevalidate_value_loanPurpose <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(929)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-}                 ## DONE - LDE Affl
-            
-            
-        } else {
-            
-            ###  LDE LITE, LDE NON-AFFILIATE  ###
-            ldevalidate_value_isProduction <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.boolean))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(900)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                ## DONE - LDE Lite
-            ldevalidate_value_leadOfferId <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(317)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                 ## DONE - LDE Lite
-            ldevalidate_value_clickId <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(901)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                     ## DONE - LDE Lite
-            ldevalidate_value_campaignId <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(901)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                  ## DONE - LDE Affl
-            ldevalidate_value_language <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(902)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                    ## DONE - LDE Lite
-            ldevalidate_value_socialSecurityNumber <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.ssn))
-                valid.first3 = expr(
-                    ! value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(\\d{3})-?(?:\\d{2})-?(?:\\d{4})\\\"$'
-                            )
-                        ) %in% c('666', '000')
-                )
-                valid.second3 = expr(
-                    ! value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(?:\\d{3})-?(\\d{2})-?(?:\\d{4})\\\"$'
-                            )
-                        ) %in% c('0')
-                )
-                valid.last4 = expr(
-                    ! value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(?:\\d{3})-?(?:\\d{2})-?(\\d{4})\\\"$'
-                            )
-                        ) %in% c('0000')
-                )
-
-
-
-
-                if (! eval(format.correct) |
-                    ! eval(valid.first3) |
-                    ! eval(valid.second3) |
-                    ! eval(valid.last4) )
-                    response.vector %<>% c(315)
-
-                if (  eval(format.correct) &
-                      eval(valid.first3) &
-                      eval(valid.second3) &
-                      eval(valid.last4) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }        ## DONE - LDE Lite
-            ldevalidate_value_email <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.email))
-                email.not.mil = expr(
-                    ! value %>% 
-                        str_detect(
-                            pattern = regex(
-                                '^\\\".*@.*\\.mil\\\"$'
-                            )
-                        )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(313)
-                if (! eval(email.not.mil))
-                    response.vector %<>% c(313)
-                if (  eval(format.correct) &
-                      eval(email.not.mil) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                       ## DONE - LDE Lite
-            ldevalidate_value_stateCode <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.state))
-                valid.state = expr(
-                    value %>%
-                        str_detect(
-                            pattern = regex(
-                                '^\\\"(?:AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\\\"$'
-                            )
-                        )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(311)
-                if (! eval(valid.state))
-                    response.vector %<>% c(402)
-                if (  eval(format.correct) &
-                      eval(valid.state))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                   ## DONE - LDE Lite
-            ldevalidate_value_grossMonthlyIncome <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.float.positive))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(332)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }          ## DONE - LDE Lite
-            ldevalidate_value_currency <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.currency))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(907)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                    ## DONE - LDE Lite
-            ldevalidate_value_currencyCode <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.currencyCode))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(907)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                ## DONE - LDE Lite
-            ldevalidate_value_firstName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(341)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                   ## DONE - LDE Lite
-            ldevalidate_value_lastName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(341)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                    ## DONE - LDE Lite
-            ldevalidate_value_dateOfBirth <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.past = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
-                )
-
-                if (! eval(format.correct) |
-                    ! eval(length.correct) )
-                    response.vector %<>% c(319)
-
-                if (  eval(format.correct) &
-                      eval(length.correct) &
-                    ! eval(date.in.past) )
-                    response.vector %<>% c(624)
-
-                if (  eval(format.correct) &
-                      eval(length.correct) &
-                      eval(date.in.past) )
-                    response.vector %<>% c(200)
-
-
-
-                return (response.vector)
-
-            }                 ## DONE - LDE Lite
-            ldevalidate_value_streetAddress <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-                not.pobox = expr(
-                    !value %>% str_detect(
-                        pattern = regex(
-                            "(?i)^\\\".*p[.]?o[.]?[\\s]*box.*\\\"$"
-                        )
-                    )
-                )
-                not.blank = expr(
-                    !(
-                        value %>% str_detect(regex.map$unquoted.null) |
-                        value %>% str_detect(regex.map$quoted.blank) |
-                        value %>% str_detect(regex.map$unquoted.boolean)
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(911)
-                if (! eval(not.blank))
-                    response.vector %<>% c(342)
-                if (! eval(not.pobox))
-                    response.vector %<>% c(608)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }               ## DONE - LDE Lite
-            ldevalidate_value_city <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-                not.blank = expr(
-                    !(
-                        value %>% str_detect(regex.map$unquoted.null) |
-                        value %>% str_detect(regex.map$quoted.blank) |
-                        value %>% str_detect(regex.map$unquoted.boolean)
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(912)
-                if (! eval(not.blank))
-                    response.vector %<>% c(342)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                        ## DONE - LDE Lite
-            ldevalidate_value_zip <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.zip))
-                not.blank = expr(
-                    !(
-                        value %>% str_detect(regex.map$unquoted.null) |
-                        value %>% str_detect(regex.map$quoted.blank) |
-                        value %>% str_detect(regex.map$unquoted.boolean)
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(913)
-                if (! eval(not.blank))
-                    response.vector %<>% c(342)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                         ## DONE - LDE Lite
-            ldevalidate_value_countryCode <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.countryCode))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(403)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                 ## DONE - LDE Lite
-            ldevalidate_value_mobilePhone <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(915)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                 ## DONE - LDE Lite
-            ldevalidate_value_homePhone <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(915)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                   ## DONE - LDE Lite
-            ldevalidate_value_bankName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(916)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                    ## DONE - LDE Lite
-            ldevalidate_value_abaRoutingNumber <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.aba))
-                checksum.pass = expr(
-                    (
-                        value %>% str_remove_all("\"") %>% substr(1,1) %>% as.integer() * 3 +
-                        value %>% str_remove_all("\"") %>% substr(2,2) %>% as.integer() * 7 +
-                        value %>% str_remove_all("\"") %>% substr(3,3) %>% as.integer() * 1 +
-                        value %>% str_remove_all("\"") %>% substr(4,4) %>% as.integer() * 3 +
-                        value %>% str_remove_all("\"") %>% substr(5,5) %>% as.integer() * 7 +
-                        value %>% str_remove_all("\"") %>% substr(6,6) %>% as.integer() * 1 +
-                        value %>% str_remove_all("\"") %>% substr(7,7) %>% as.integer() * 3 +
-                        value %>% str_remove_all("\"") %>% substr(8,8) %>% as.integer() * 7 +
-                        value %>% str_remove_all("\"") %>% substr(9,9) %>% as.integer() * 1
-                    ) %% 10 == 0
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(917)
-                if (  eval(format.correct) &
-                    ! eval(checksum.pass) )
-                    response.vector %<>% c(999)
-                if (  eval(format.correct) &
-                      eval(checksum.pass) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }            ## DONE - LDE Lite
-            ldevalidate_value_accountNumber <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.accountNumber))
-                is.null = expr(
-                    value %>% str_detect(regex.map$unquoted.null)
-                )
-                not.blank = expr(
-                    !(
-                        value %>% str_detect(regex.map$quoted.blank) |
-                        value %>% str_detect(regex.map$unquoted.boolean)
-                    )
-                )
-
-                if (! eval(is.null) & ! eval(format.correct))
-                    response.vector %<>% c(605)
-                if (! eval(is.null) & ! eval(not.blank) )
-                    response.vector %<>% c(322)
-                if (    eval(is.null) |
-                     (! eval(is.null) & eval(format.correct) & eval(not.blank) ) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }               ## DONE - LDE Lite
-            ldevalidate_value_accountType <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(
-                    value %>% str_detect(
-                        regex.map$unquoted.integer
-                    ) |
-                    value %>% str_detect(
-                        regex.map$unquoted.null
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(919)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                 ## DONE - LDE Lite
-            ldevalidate_value_accountLength <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(920)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }               ## DONE - LDE Lite
-            ldevalidate_value_incomeType <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(921)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                  ## DONE - LDE Lite
-            ldevalidate_value_payrollType <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.name))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(922)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                 ## DONE - LDE Lite
-            ldevalidate_value_payrollFrequency <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(
-                    value %>% str_detect(
-                        regex.map$unquoted.integer
-                    ) |
-                    value %>% str_detect(
-                        regex.map$unquoted.null
-                    )
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(923)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }            ## DONE - LDE Lite
-            ldevalidate_value_lastPayrollDate <- function (value) {
-
-                # can be unquoted null OR (date format AND in the past)
-                response.vector = c()
-
-                format.isempty = expr(
-                    value %>% str_detect(regex.map$unquoted.null) |
-                    value %>% str_detect(regex.map$quoted.empty)
-                )
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.past = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
-                )
-
-                if (  ! eval(format.isempty) &
-                     (! eval(format.correct) | ! eval(length.correct))  )
-                    response.vector %<>% c(319)
-
-                if ( ! eval(format.isempty) &
-                      (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
-                    response.vector %<>% c(319)
-
-                if ( eval(format.isempty) |
-                    (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }             ## DONE - LDE Lite
-            ldevalidate_value_nextPayrollDate <- function (value) {
-
-                # can be unquoted null OR (date format AND in the future)
-                response.vector = c()
-
-                format.isempty = expr(
-                    value %>% str_detect(regex.map$unquoted.null) |
-                    value %>% str_detect(regex.map$quoted.empty)
-                )
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.future = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() > args$present.time
-                )
-
-                if (  ! eval(format.isempty) &
-                     (! eval(format.correct) | ! eval(length.correct))  )
-                    response.vector %<>% c(319)
-
-                if ( ! eval(format.isempty) &
-                      (eval(format.correct) & eval(length.correct)) & ! eval(date.in.future) )
-                    response.vector %<>% c(319)
-
-                if ( eval(format.isempty) |
-                    (eval(format.correct) & eval(length.correct)) & eval(date.in.future) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }             ## DONE - LDE Lite
-            ldevalidate_value_employerName <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-                different.from.bankName = expr(
-                    value != args$bankName || length(args$bankName) == 0
-                )
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(926)
-                if (! eval(different.from.bankName))
-                    response.vector %<>% c(610)
-                if (  eval(format.correct) &
-                      eval(different.from.bankName) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                ## DONE - LDE Lite
-            ldevalidate_value_hireDate <- function (value) {
-
-                # can be unquoted null OR (date format AND in the past)
-                response.vector = c()
-
-                format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
-                format.correct = expr(value %>% str_detect(regex.map$quoted.date))
-                length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
-                date.in.past = expr(
-                    value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
-                )
-
-                if (  ! eval(format.isnull) &
-                     (! eval(format.correct) | ! eval(length.correct))  )
-                    response.vector %<>% c(319)
-
-                if ( ! eval(format.isnull) &
-                      (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
-                    response.vector %<>% c(319)
-
-                if ( eval(format.isnull) |
-                    (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                    ## DONE - LDE Lite
-            ldevalidate_value_requestedLoanAmount <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$optional.quoted.float.positive))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(928)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }         ## DONE - LDE Lite
-            ldevalidate_value_loanPurpose <- function (value) {
-
-                response.vector = c()
-
-                format.correct = expr(value %>% str_detect(regex.map$quoted.string))
-
-                if (! eval(format.correct))
-                    response.vector %<>% c(929)
-                if (  eval(format.correct))
-                    response.vector %<>% c(200)
-
-
-                return (response.vector)
-
-            }                 ## DONE - LDE Lite
-            
-        }
+        response.vector = c()
         
-        ldevalidate_map_set = function () {
-            list(
-                isProduction = ldevalidate_value_isProduction,
-                leadOfferId = ldevalidate_value_leadOfferId,
-                click_id = ldevalidate_value_clickId,
-                campaign_id = ldevalidate_value_campaignId,
-                language = ldevalidate_value_language,
-                socialSecurityNumber = ldevalidate_value_socialSecurityNumber,
-                email = ldevalidate_value_email,
-                stateCode = ldevalidate_value_stateCode,
-                grossMonthlyIncome = ldevalidate_value_grossMonthlyIncome,
-                currency = ldevalidate_value_currency,
-                currencyCode = ldevalidate_value_currencyCode,
-                firstName = ldevalidate_value_firstName,
-                lastName = ldevalidate_value_lastName,
-                dateOfBirth = ldevalidate_value_dateOfBirth,
-                streetAddress = ldevalidate_value_streetAddress,
-                city = ldevalidate_value_city,
-                zip = ldevalidate_value_zip,
-                countryCode = ldevalidate_value_countryCode,
-                mobilePhone = ldevalidate_value_mobilePhone,
-                homePhone = ldevalidate_value_homePhone,
-                bankName = ldevalidate_value_bankName,
-                abaRoutingNumber = ldevalidate_value_abaRoutingNumber,
-                accountNumber = ldevalidate_value_accountNumber,
-                accountType = ldevalidate_value_accountType,
-                accountLength = ldevalidate_value_accountLength,
-                incomeType = ldevalidate_value_incomeType,
-                payrollType = ldevalidate_value_payrollType,
-                payrollFrequency = ldevalidate_value_payrollFrequency,
-                lastPayrollDate = ldevalidate_value_lastPayrollDate,
-                nextPayrollDate = ldevalidate_value_nextPayrollDate,
-                employerName = ldevalidate_value_employerName,
-                hireDate = ldevalidate_value_hireDate,
-                requestedLoanAmount = ldevalidate_value_requestedLoanAmount,
-                loanPurpose = ldevalidate_value_loanPurpose
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.boolean))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(900)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                ## DONE - LDE Affl
+      ldevalidate_value_leadOfferId <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(901)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Affl
+      ldevalidate_value_clickId <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(901)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                     ## DONE - LDE Affl
+      ldevalidate_value_campaignId <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(901)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                  ## DONE - LDE Affl
+      ldevalidate_value_language <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.name))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(902)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Affl
+      ldevalidate_value_socialSecurityNumber <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.ssn))
+        valid.first3 = expr(
+          ! value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(\\d{3})-?(?:\\d{2})-?(?:\\d{4})\\\"$'
+              )
+            ) %in% c('666', '000')
+        )
+        valid.second3 = expr(
+          ! value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(?:\\d{3})-?(\\d{2})-?(?:\\d{4})\\\"$'
+              )
+            ) %in% c('0')
+        )
+        valid.last4 = expr(
+          ! value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(?:\\d{3})-?(?:\\d{2})-?(\\d{4})\\\"$'
+              )
+            ) %in% c('0000')
+        )
+        
+        
+        
+        
+        if (! eval(format.correct) |
+            ! eval(valid.first3) |
+            ! eval(valid.second3) |
+            ! eval(valid.last4) )
+          response.vector %<>% c(315)
+        
+        if (  eval(format.correct) &
+              eval(valid.first3) &
+              eval(valid.second3) &
+              eval(valid.last4) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }        ## DONE - LDE Affl
+      ldevalidate_value_email <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.email))
+        email.not.mil = expr(
+          ! value %>% 
+            str_detect(
+              pattern = regex(
+                '^\\\".*@.*\\.mil\\\"$'
+              )
             )
-        }
+        )
         
-        return (ldevalidate_map_set())
+        if (! eval(format.correct))
+          response.vector %<>% c(313)
+        if (! eval(email.not.mil))
+          response.vector %<>% c(313)
+        if (  eval(format.correct) &
+              eval(email.not.mil) )
+          response.vector %<>% c(200)
         
+        
+        return (response.vector)
+        
+      }                       ## DONE - LDE Affl
+      ldevalidate_value_stateCode <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.state))
+        valid.state = expr(
+          value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(?:AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\\\"$'
+              )
+            )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(905)
+        if (! eval(valid.state))
+          response.vector %<>% c(402)
+        if (  eval(format.correct) &
+              eval(valid.state))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                   ## DONE - LDE Affl
+      ldevalidate_value_grossMonthlyIncome <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.float.positive))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(333)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }          ## DONE - LDE Affl
+      ldevalidate_value_currency <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.currency))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(907)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Affl
+      ldevalidate_value_currencyCode <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.currencyCode))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(907)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                ## DONE - LDE Affl
+      ldevalidate_value_firstName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex("\\\"[\\w\\s']*\\\"")))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(908)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                   ## DONE - LDE Affl
+      ldevalidate_value_lastName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex("\\\"[\\w\\s']*\\\"")))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(909)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Affl
+      ldevalidate_value_dateOfBirth <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.past = expr(
+          value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
+        )
+        
+        if (! eval(format.correct) |
+            ! eval(length.correct) )
+          response.vector %<>% c(319)
+        
+        if (  eval(format.correct) &
+              eval(length.correct) &
+              ! eval(date.in.past) )
+          response.vector %<>% c(624)
+        
+        if (  eval(format.correct) &
+              eval(length.correct) &
+              eval(date.in.past) )
+          response.vector %<>% c(200)
+        
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Affl
+      ldevalidate_value_streetAddress <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        not.pobox = expr(
+          !value %>% str_detect(
+            pattern = regex(
+              "(?i)^\\\".*p[.]?o[.]?[\\s]*box.*\\\"$"
+            )
+          )
+        )
+        not.blank = expr(
+          !(
+            value %>% str_detect(regex.map$unquoted.null) |
+              value %>% str_detect(regex.map$quoted.blank) |
+              value %>% str_detect(regex.map$unquoted.boolean)
+          )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(911)
+        if (! eval(not.blank))
+          response.vector %<>% c(342)
+        if (! eval(not.pobox))
+          response.vector %<>% c(608)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }               ## DONE - LDE Affl
+      ldevalidate_value_city <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.name))
+        not.blank = expr(
+          !(
+            value %>% str_detect(regex.map$unquoted.null) |
+              value %>% str_detect(regex.map$quoted.blank) |
+              value %>% str_detect(regex.map$unquoted.boolean)
+          )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(912)
+        if (! eval(not.blank))
+          response.vector %<>% c(342)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                        ## DONE - LDE Affl
+      ldevalidate_value_zip <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.zip))
+        not.blank = expr(
+          !(
+            value %>% str_detect(regex.map$unquoted.null) |
+              value %>% str_detect(regex.map$quoted.blank) |
+              value %>% str_detect(regex.map$unquoted.boolean)
+          )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(913)
+        if (! eval(not.blank))
+          response.vector %<>% c(342)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                         ## DONE - LDE Affl
+      ldevalidate_value_countryCode <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.countryCode))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(403)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Affl
+      ldevalidate_value_mobilePhone <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(701)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Affl
+      ldevalidate_value_homePhone <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(915)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                   ## DONE - LDE Affl
+      ldevalidate_value_bankName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(916)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Affl
+      ldevalidate_value_abaRoutingNumber <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.aba))
+        checksum.pass = expr(
+          (
+            value %>% str_remove_all("\"") %>% substr(1,1) %>% as.integer() * 3 +
+              value %>% str_remove_all("\"") %>% substr(2,2) %>% as.integer() * 7 +
+              value %>% str_remove_all("\"") %>% substr(3,3) %>% as.integer() * 1 +
+              value %>% str_remove_all("\"") %>% substr(4,4) %>% as.integer() * 3 +
+              value %>% str_remove_all("\"") %>% substr(5,5) %>% as.integer() * 7 +
+              value %>% str_remove_all("\"") %>% substr(6,6) %>% as.integer() * 1 +
+              value %>% str_remove_all("\"") %>% substr(7,7) %>% as.integer() * 3 +
+              value %>% str_remove_all("\"") %>% substr(8,8) %>% as.integer() * 7 +
+              value %>% str_remove_all("\"") %>% substr(9,9) %>% as.integer() * 1
+          ) %% 10 == 0
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(711)
+        if (  eval(format.correct) &
+              ! eval(checksum.pass) )
+          response.vector %<>% c(999)
+        if (  eval(format.correct) &
+              eval(checksum.pass) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }            ## DONE - LDE Affl
+      ldevalidate_value_accountNumber <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.accountNumber))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(710)
+        if (  eval(format.correct) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }               ## DONE - LDE Affl
+      ldevalidate_value_accountType <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(712)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Affl
+      ldevalidate_value_accountLength <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(713)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }               ## DONE - LDE Affl
+      ldevalidate_value_incomeType <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.name))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(921)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                  ## DONE - LDE Affl
+      ldevalidate_value_payrollType <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(
+          value %>% str_detect(
+            pattern = regex(
+              '^\\\"(?:[Cc]ash|[Cc]heck|[Dd]irect\\s?[Dd]eposit)\\\"$'
+            )
+          )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(705)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Affl
+      ldevalidate_value_payrollFrequency <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(706)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }            ## DONE - LDE Affl
+      ldevalidate_value_lastPayrollDate <- function (value) {
+        
+        # can be unquoted null OR (date format AND in the past)
+        response.vector = c()
+        
+        format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.past = expr(
+          value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
+        )
+        
+        if (  ! eval(format.isnull) &
+              (! eval(format.correct) | ! eval(length.correct))  )
+          response.vector %<>% c(707)
+        
+        if ( ! eval(format.isnull) &
+             (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
+          response.vector %<>% c(707)
+        
+        if ( eval(format.isnull) |
+             (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }             ## DONE - LDE Affl
+      ldevalidate_value_nextPayrollDate <- function (value) {
+        
+        # can be unquoted null OR (date format AND in the future)
+        response.vector = c()
+        
+        format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.future = expr(
+          value %>% str_remove_all("\"") %>% as.integer() > args$present.time
+        )
+        
+        if (  ! eval(format.isnull) &
+              (! eval(format.correct) | ! eval(length.correct))  )
+          response.vector %<>% c(708)
+        
+        if ( ! eval(format.isnull) &
+             (eval(format.correct) & eval(length.correct)) & ! eval(date.in.future) )
+          response.vector %<>% c(708)
+        
+        if ( eval(format.isnull) |
+             (eval(format.correct) & eval(length.correct)) & eval(date.in.future) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }             ## DONE - LDE Affl
+      ldevalidate_value_employerName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        different.from.bankName = expr(
+          value != args$bankName || length(args$bankName) == 0
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(926)
+        if (! eval(different.from.bankName))
+          response.vector %<>% c(610)
+        if (  eval(format.correct) &
+              eval(different.from.bankName) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                ## DONE - LDE Affl
+      ldevalidate_value_hireDate <- function (value) {
+        
+        # can be unquoted null OR (date format AND in the past)
+        response.vector = c()
+        
+        format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.past = expr(
+          value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
+        )
+        
+        if (  ! eval(format.isnull) &
+              (! eval(format.correct) | ! eval(length.correct))  )
+          response.vector %<>% c(319)
+        
+        if ( ! eval(format.isnull) &
+             (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
+          response.vector %<>% c(319)
+        
+        if ( eval(format.isnull) |
+             (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Affl
+      ldevalidate_value_requestedLoanAmount <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$optional.quoted.float.positive))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(714)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }         ## DONE - LDE Affl
+      ldevalidate_value_loanPurpose <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(929)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Affl
+      
+      
+    } else {
+      
+      ###  LDE LITE, LDE NON-AFFILIATE  ###
+      ldevalidate_value_isProduction <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.boolean))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(900)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                ## DONE - LDE Lite
+      ldevalidate_value_leadOfferId <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(317)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Lite
+      ldevalidate_value_clickId <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(901)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                     ## DONE - LDE Lite
+      ldevalidate_value_campaignId <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(901)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                  ## DONE - LDE Affl
+      ldevalidate_value_language <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.name))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(902)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Lite
+      ldevalidate_value_socialSecurityNumber <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.ssn))
+        valid.first3 = expr(
+          ! value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(\\d{3})-?(?:\\d{2})-?(?:\\d{4})\\\"$'
+              )
+            ) %in% c('666', '000')
+        )
+        valid.second3 = expr(
+          ! value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(?:\\d{3})-?(\\d{2})-?(?:\\d{4})\\\"$'
+              )
+            ) %in% c('0')
+        )
+        valid.last4 = expr(
+          ! value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(?:\\d{3})-?(?:\\d{2})-?(\\d{4})\\\"$'
+              )
+            ) %in% c('0000')
+        )
+        
+        
+        
+        
+        if (! eval(format.correct) |
+            ! eval(valid.first3) |
+            ! eval(valid.second3) |
+            ! eval(valid.last4) )
+          response.vector %<>% c(315)
+        
+        if (  eval(format.correct) &
+              eval(valid.first3) &
+              eval(valid.second3) &
+              eval(valid.last4) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }        ## DONE - LDE Lite
+      ldevalidate_value_email <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.email))
+        email.not.mil = expr(
+          ! value %>% 
+            str_detect(
+              pattern = regex(
+                '^\\\".*@.*\\.mil\\\"$'
+              )
+            )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(313)
+        if (! eval(email.not.mil))
+          response.vector %<>% c(313)
+        if (  eval(format.correct) &
+              eval(email.not.mil) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                       ## DONE - LDE Lite
+      ldevalidate_value_stateCode <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.state))
+        valid.state = expr(
+          value %>%
+            str_detect(
+              pattern = regex(
+                '^\\\"(?:AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|DC)\\\"$'
+              )
+            )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(311)
+        if (! eval(valid.state))
+          response.vector %<>% c(402)
+        if (  eval(format.correct) &
+              eval(valid.state))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                   ## DONE - LDE Lite
+      ldevalidate_value_grossMonthlyIncome <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.float.positive))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(332)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }          ## DONE - LDE Lite
+      ldevalidate_value_currency <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.currency))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(907)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Lite
+      ldevalidate_value_currencyCode <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.currencyCode))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(907)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                ## DONE - LDE Lite
+      ldevalidate_value_firstName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex("\\\"[\\w\\s']*\\\"")))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(341)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                   ## DONE - LDE Lite
+      ldevalidate_value_lastName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex("\\\"[\\w\\s']*\\\"")))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(341)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Lite
+      ldevalidate_value_dateOfBirth <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.past = expr(
+          value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
+        )
+        
+        if (! eval(format.correct) |
+            ! eval(length.correct) )
+          response.vector %<>% c(319)
+        
+        if (  eval(format.correct) &
+              eval(length.correct) &
+              ! eval(date.in.past) )
+          response.vector %<>% c(624)
+        
+        if (  eval(format.correct) &
+              eval(length.correct) &
+              eval(date.in.past) )
+          response.vector %<>% c(200)
+        
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Lite
+      ldevalidate_value_streetAddress <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        not.pobox = expr(
+          !value %>% str_detect(
+            pattern = regex(
+              "(?i)^\\\".*p[.]?o[.]?[\\s]*box.*\\\"$"
+            )
+          )
+        )
+        not.blank = expr(
+          !(
+            value %>% str_detect(regex.map$unquoted.null) |
+              value %>% str_detect(regex.map$quoted.blank) |
+              value %>% str_detect(regex.map$unquoted.boolean)
+          )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(911)
+        if (! eval(not.blank))
+          response.vector %<>% c(342)
+        if (! eval(not.pobox))
+          response.vector %<>% c(608)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }               ## DONE - LDE Lite
+      ldevalidate_value_city <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.name))
+        not.blank = expr(
+          !(
+            value %>% str_detect(regex.map$unquoted.null) |
+              value %>% str_detect(regex.map$quoted.blank) |
+              value %>% str_detect(regex.map$unquoted.boolean)
+          )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(912)
+        if (! eval(not.blank))
+          response.vector %<>% c(342)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                        ## DONE - LDE Lite
+      ldevalidate_value_zip <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.zip))
+        not.blank = expr(
+          !(
+            value %>% str_detect(regex.map$unquoted.null) |
+              value %>% str_detect(regex.map$quoted.blank) |
+              value %>% str_detect(regex.map$unquoted.boolean)
+          )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(913)
+        if (! eval(not.blank))
+          response.vector %<>% c(342)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                         ## DONE - LDE Lite
+      ldevalidate_value_countryCode <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.countryCode))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(403)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Lite
+      ldevalidate_value_mobilePhone <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(915)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Lite
+      ldevalidate_value_homePhone <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.phone))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(915)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                   ## DONE - LDE Lite
+      ldevalidate_value_bankName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(916)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Lite
+      ldevalidate_value_abaRoutingNumber <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.aba))
+        checksum.pass = expr(
+          (
+            value %>% str_remove_all("\"") %>% substr(1,1) %>% as.integer() * 3 +
+              value %>% str_remove_all("\"") %>% substr(2,2) %>% as.integer() * 7 +
+              value %>% str_remove_all("\"") %>% substr(3,3) %>% as.integer() * 1 +
+              value %>% str_remove_all("\"") %>% substr(4,4) %>% as.integer() * 3 +
+              value %>% str_remove_all("\"") %>% substr(5,5) %>% as.integer() * 7 +
+              value %>% str_remove_all("\"") %>% substr(6,6) %>% as.integer() * 1 +
+              value %>% str_remove_all("\"") %>% substr(7,7) %>% as.integer() * 3 +
+              value %>% str_remove_all("\"") %>% substr(8,8) %>% as.integer() * 7 +
+              value %>% str_remove_all("\"") %>% substr(9,9) %>% as.integer() * 1
+          ) %% 10 == 0
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(917)
+        if (  eval(format.correct) &
+              ! eval(checksum.pass) )
+          response.vector %<>% c(999)
+        if (  eval(format.correct) &
+              eval(checksum.pass) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }            ## DONE - LDE Lite
+      ldevalidate_value_accountNumber <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.accountNumber))
+        is.null = expr(
+          value %>% str_detect(regex.map$unquoted.null)
+        )
+        not.blank = expr(
+          !(
+            value %>% str_detect(regex.map$quoted.blank) |
+              value %>% str_detect(regex.map$unquoted.boolean)
+          )
+        )
+        
+        if (! eval(is.null) & ! eval(format.correct))
+          response.vector %<>% c(605)
+        if (! eval(is.null) & ! eval(not.blank) )
+          response.vector %<>% c(322)
+        if (    eval(is.null) |
+                (! eval(is.null) & eval(format.correct) & eval(not.blank) ) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }               ## DONE - LDE Lite
+      ldevalidate_value_accountType <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(
+          value %>% str_detect(
+            regex.map$unquoted.integer
+          ) |
+            value %>% str_detect(
+              regex.map$unquoted.null
+            )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(919)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Lite
+      ldevalidate_value_accountLength <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$unquoted.integer))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(920)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }               ## DONE - LDE Lite
+      ldevalidate_value_incomeType <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.name))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(921)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                  ## DONE - LDE Lite
+      ldevalidate_value_payrollType <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.name))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(922)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Lite
+      ldevalidate_value_payrollFrequency <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(
+          value %>% str_detect(
+            regex.map$unquoted.integer
+          ) |
+            value %>% str_detect(
+              regex.map$unquoted.null
+            )
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(923)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }            ## DONE - LDE Lite
+      ldevalidate_value_lastPayrollDate <- function (value) {
+        
+        # can be unquoted null OR (date format AND in the past)
+        response.vector = c()
+        
+        format.isempty = expr(
+          value %>% str_detect(regex.map$unquoted.null) |
+            value %>% str_detect(regex.map$quoted.empty)
+        )
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.past = expr(
+          value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
+        )
+        
+        if (  ! eval(format.isempty) &
+              (! eval(format.correct) | ! eval(length.correct))  )
+          response.vector %<>% c(319)
+        
+        if ( ! eval(format.isempty) &
+             (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
+          response.vector %<>% c(319)
+        
+        if ( eval(format.isempty) |
+             (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }             ## DONE - LDE Lite
+      ldevalidate_value_nextPayrollDate <- function (value) {
+        
+        # can be unquoted null OR (date format AND in the future)
+        response.vector = c()
+        
+        format.isempty = expr(
+          value %>% str_detect(regex.map$unquoted.null) |
+            value %>% str_detect(regex.map$quoted.empty)
+        )
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.future = expr(
+          value %>% str_remove_all("\"") %>% as.integer() > args$present.time
+        )
+        
+        if (  ! eval(format.isempty) &
+              (! eval(format.correct) | ! eval(length.correct))  )
+          response.vector %<>% c(319)
+        
+        if ( ! eval(format.isempty) &
+             (eval(format.correct) & eval(length.correct)) & ! eval(date.in.future) )
+          response.vector %<>% c(319)
+        
+        if ( eval(format.isempty) |
+             (eval(format.correct) & eval(length.correct)) & eval(date.in.future) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }             ## DONE - LDE Lite
+      ldevalidate_value_employerName <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        different.from.bankName = expr(
+          value != args$bankName || length(args$bankName) == 0
+        )
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(926)
+        if (! eval(different.from.bankName))
+          response.vector %<>% c(610)
+        if (  eval(format.correct) &
+              eval(different.from.bankName) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                ## DONE - LDE Lite
+      ldevalidate_value_hireDate <- function (value) {
+        
+        # can be unquoted null OR (date format AND in the past)
+        response.vector = c()
+        
+        format.isnull = expr(value %>% str_detect(regex.map$unquoted.null))
+        format.correct = expr(value %>% str_detect(regex.map$quoted.date))
+        length.correct = expr(value %>% str_remove_all("\"") %>% as.integer() %>% nchar() == 8)
+        date.in.past = expr(
+          value %>% str_remove_all("\"") %>% as.integer() <= args$present.time
+        )
+        
+        if (  ! eval(format.isnull) &
+              (! eval(format.correct) | ! eval(length.correct))  )
+          response.vector %<>% c(319)
+        
+        if ( ! eval(format.isnull) &
+             (eval(format.correct) & eval(length.correct)) & ! eval(date.in.past) )
+          response.vector %<>% c(319)
+        
+        if ( eval(format.isnull) |
+             (eval(format.correct) & eval(length.correct)) & eval(date.in.past) )
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                    ## DONE - LDE Lite
+      ldevalidate_value_requestedLoanAmount <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$optional.quoted.float.positive))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(928)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }         ## DONE - LDE Lite
+      ldevalidate_value_loanPurpose <- function (value) {
+        
+        response.vector = c()
+        
+        format.correct = expr(value %>% str_detect(regex.map$quoted.string))
+        
+        if (! eval(format.correct))
+          response.vector %<>% c(929)
+        if (  eval(format.correct))
+          response.vector %<>% c(200)
+        
+        
+        return (response.vector)
+        
+      }                 ## DONE - LDE Lite
+      
     }
     
+    ldevalidate_map_set = function () {
+      list(
+        isProduction = ldevalidate_value_isProduction,
+        leadOfferId = ldevalidate_value_leadOfferId,
+        click_id = ldevalidate_value_clickId,
+        campaign_id = ldevalidate_value_campaignId,
+        language = ldevalidate_value_language,
+        socialSecurityNumber = ldevalidate_value_socialSecurityNumber,
+        email = ldevalidate_value_email,
+        stateCode = ldevalidate_value_stateCode,
+        grossMonthlyIncome = ldevalidate_value_grossMonthlyIncome,
+        currency = ldevalidate_value_currency,
+        currencyCode = ldevalidate_value_currencyCode,
+        firstName = ldevalidate_value_firstName,
+        lastName = ldevalidate_value_lastName,
+        dateOfBirth = ldevalidate_value_dateOfBirth,
+        streetAddress = ldevalidate_value_streetAddress,
+        city = ldevalidate_value_city,
+        zip = ldevalidate_value_zip,
+        countryCode = ldevalidate_value_countryCode,
+        mobilePhone = ldevalidate_value_mobilePhone,
+        homePhone = ldevalidate_value_homePhone,
+        bankName = ldevalidate_value_bankName,
+        abaRoutingNumber = ldevalidate_value_abaRoutingNumber,
+        accountNumber = ldevalidate_value_accountNumber,
+        accountType = ldevalidate_value_accountType,
+        accountLength = ldevalidate_value_accountLength,
+        incomeType = ldevalidate_value_incomeType,
+        payrollType = ldevalidate_value_payrollType,
+        payrollFrequency = ldevalidate_value_payrollFrequency,
+        lastPayrollDate = ldevalidate_value_lastPayrollDate,
+        nextPayrollDate = ldevalidate_value_nextPayrollDate,
+        employerName = ldevalidate_value_employerName,
+        hireDate = ldevalidate_value_hireDate,
+        requestedLoanAmount = ldevalidate_value_requestedLoanAmount,
+        loanPurpose = ldevalidate_value_loanPurpose
+      )
+    }
     
-    return( validator(admethod)[[key]](value) )
+    return (ldevalidate_map_set())
     
+  }
+  
+  
+  return( validator(admethod)[[key]](value) )
+  
 }
 
 validateRanges = function (key, value, regex.map, ...) {
